@@ -34,6 +34,7 @@ const Pokemon = () => {
       // setAllSprites(datadata[index].pokemon)
       setSelectedType(type);
     });
+    
   };
 
   const handlePokemonSelect = (pokemon) => {
@@ -56,8 +57,6 @@ const Pokemon = () => {
         setSprites(data[index].sprites);
         setSelectedPokemon(pokemon);
         // 6. we want to get all sprites of the pokemons of this type
-        
-
       })
       .catch((error) => console.log("Error getting data", error));
   };

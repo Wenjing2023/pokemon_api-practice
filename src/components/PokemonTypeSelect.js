@@ -1,4 +1,5 @@
-const PokemonTypeSelect = ({ pokemonTypes, handleTypeSelect }) => {
+const PokemonTypeSelect = ({ pokemonTypes, handleTypeSelect, pokemons }) => {
+  console.log("data 2 pokemons here:", pokemons);
   const selectOptions = pokemonTypes.map((pokemonType, index) => {
     return (
       <option key={index} value={index}>
