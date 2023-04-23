@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PokemonList from "../components/PokemonSelect";
-import styled from "styled-components";
 import PokemonTypeSelect from "../components/PokemonTypeSelect";
 import PokemonSelect from "../components/PokemonSelect";
+import BucketList from "../components/BucketList";
 
 const Pokemon = () => {
   const [pokemonTypes, setPokemonTypes] = useState(null);
@@ -10,7 +10,9 @@ const Pokemon = () => {
   const [pokemons, setPokemons] = useState(null);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [sprites, setSprites] = useState(null);
+  const [bucketList, setBucketList] = useState([]);
   const [allSprites, setAllSprites] = useState(null);
+
   useEffect(() => {
     fetch("https://pokeapi.co/api/v2/type/")
       .then((res) => res.json())
@@ -28,13 +30,12 @@ const Pokemon = () => {
       // 3. we are already in one type url
     });
     Promise.all(pokemonsPromises).then((data) => {
-      console.log("data1 has all pokemonTypes: ", data);
-      console.log("data2 has pokemons of this type: ", data[index].pokemon);
+      // console.log("data1 has all pokemonTypes: ", data);
+      // console.log("data2 has pokemons of this type: ", data[index].pokemon);
       setPokemons(data[index].pokemon);
       // setAllSprites(datadata[index].pokemon)
       setSelectedType(type);
     });
-    
   };
 
   const handlePokemonSelect = (pokemon) => {
@@ -48,17 +49,38 @@ const Pokemon = () => {
     });
     Promise.all(allPokemonPromises)
       .then((data) => {
-        console.log(
-          "data3 has sprites of the selected pokemon: ",
-          data[index].sprites
-        );
-        console.log("data4 has all pokemons url of this type: ", data);
+        // console.log(
+        //   // "data3 has sprites of the selected pokemon: ",
+        //   data[index].sprites
+        // );
+        // console.log("data4 has all pokemons url of this type: ", data);
         // 5. we get all links of this type of pokemons
         setSprites(data[index].sprites);
         setSelectedPokemon(pokemon);
         // 6. we want to get all sprites of the pokemons of this type
       })
       .catch((error) => console.log("Error getting data", error));
+  };
+
+  const addToBucketList = (pokemon) => {
+    const foundPokemon = bucketList.find((p) => {
+      return (p.pokemon.name = pokemon.pokemon.name);
+    });
+    if (!foundPokemon) {
+      const newPokemonList = [...bucketList, pokemon];
+      setBucketList(newPokemonList);
+    }
+    // else {
+    //   const newPokemonList = bucketList.filter((p) => {
+    //     return p.pokemon.name !== pokemon.pokemon.name;
+    //   });
+    //   setBucketList(newPokemonList);
+    // }
+    console.log("clicked event, bucketList: ", bucketList);
+    console.log("pockemonType: ", selectedType);
+    console.log("selected pockemon: ", selectedPokemon);
+
+    // console.log("pokemons: ", pokemons);
   };
   return (
     <>
@@ -76,8 +98,10 @@ const Pokemon = () => {
           handlePokemonSelect={handlePokemonSelect}
           sprites={sprites}
           selectedPokemon={selectedPokemon}
+          handlePokemonClick={addToBucketList}
         />
       ) : null}
+      {bucketList ? <BucketList bucketList={bucketList} /> : null}
     </>
   );
 };
